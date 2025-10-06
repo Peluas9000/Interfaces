@@ -18,7 +18,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
 
-public class cda extends JFrame {
+public class cda extends JFrame  {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
