@@ -19,11 +19,15 @@ public class MenuColorFondo extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JMenuBar mb;
-	private JMenu m;
-	private JMenuItem m1, m2;
-	private JMenu m3;
-	private JMenuItem m4,m5;
+	private JMenu menu;
+	private JMenuItem item1, item2;
+	private JMenu menu2;
+	private JMenuItem item4,item5;
 
+	
+	private JMenu menu3;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -53,26 +57,26 @@ public class MenuColorFondo extends JFrame implements ActionListener {
 		mb = new JMenuBar();
 		setJMenuBar(mb);
 		
-		m3=new JMenu("Azul");
-		m = new JMenu("Opciones");
+		menu2=new JMenu("Azul");
+		menu = new JMenu("Opciones");
 		
-		mb.add(m);
-		
-		
+		mb.add(menu);
 		
 		
-		m1 = new JMenuItem("Rojo");
 		
-		m1.addActionListener(this);
+		
+		item1 = new JMenuItem("Rojo");
+		
+		item1.addActionListener(this);
 
-		m.add(m1);
+		menu.add(item1);
 
-		m2 = new JMenuItem("Verde");
+		item2 = new JMenuItem("Verde");
 
-		m2.addActionListener(this);
-		m.add(m2);
+		item2.addActionListener(this);
+		menu.add(item2);
 	
-		m.add(m3);
+		menu.add(menu2);
 		
 		
 	}
@@ -80,11 +84,11 @@ public class MenuColorFondo extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Container c=this.getContentPane();
-		if(e.getSource()==m1) {
+		if(e.getSource()==item1) {
 			c.setBackground(Color.RED);
-		}if(e.getSource()==m2) {
+		}if(e.getSource()==item2) {
 			c.setBackground(Color.GREEN);
-		}if(e.getSource()==m3) {
+		}if(e.getSource()==menu2) {
 			c.setBackground(Color.BLUE);
 		}
 		
