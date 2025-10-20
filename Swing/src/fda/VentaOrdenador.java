@@ -3,12 +3,14 @@ package fda;
 import java.awt.EventQueue;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -18,18 +20,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
 public class VentaOrdenador extends JFrame implements ActionListener{
-
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel cliente,localidad ;
 	private JTextField textField;
 	private JComboBox<String> localidades;
 	private JTextArea textArea;
-	private JLabel listaClientes;
+	private JList<String> listaClientes;
 	private JLabel procesador;
 	private JLabel memoria;
 	private JLabel monitor;
@@ -91,13 +94,15 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		localidad.setBounds(10, 53, 46, 14);
 		contentPane.add(localidad);
 		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setBounds(380, 16, 153, 69);
-		contentPane.add(textArea_1);
 		
-		listaClientes = new JLabel("Lista de clientes");
-		listaClientes.setBounds(262, 21, 108, 14);
-		contentPane.add(listaClientes);
+		
+		DefaultListModel<String> modelo = new DefaultListModel<>();
+		listaClientes = new JList<>(modelo);
+		JScrollPane scroll = new JScrollPane(listaClientes);
+		scroll.setBounds(262, 21, 108, 60); // aumentamos altura visible
+		contentPane.add(scroll);
+
+		
 		
 		localidades =new JComboBox<String>();
 		localidades.setBounds(90, 50, 100, 20);
@@ -265,28 +270,90 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		cancelar.setBounds(485, 249, 89, 23);
 		contentPane.add(cancelar);
 		
-		JButton salir = new JButton("Salir");
+		 salir = new JButton("Salir");
 		salir.setBounds(485, 283, 89, 23);
 		contentPane.add(salir);
-		
 		
 		añadir.addActionListener(this);
 		salir.addActionListener(this);
 		
+		añadir.setEnabled(false);
+		buscar.setEnabled(false);
+		eliminar.setEnabled(false);
+		botonProcesador1.setEnabled(false);
+		botonProcesador2.setEnabled(false);
+		botonProcesador3.setEnabled(false);
+		botonProcesador4.setEnabled(false);
 		
-		  
+		botonDisco1.setEnabled(false);
+		botonDisco2.setEnabled(false);
+		botonDisco3.setEnabled(false);
+		botonDisco4.setEnabled(false);
 		
+		botonMemoria1.setEnabled(false);
+		botonMemoria2.setEnabled(false);
+		botonMemoria3.setEnabled(false);
+		botonMemoria4.setEnabled(false);
+		
+		botonMonitor1.setEnabled(false);
+		botonMonitor2.setEnabled(false);
+		botonMonitor3.setEnabled(false);
+		botonMonitor4.setEnabled(false);
+
+		
+		
+		textField.addActionListener(e -> {
+			String nombre = textField.getText().trim();
+			if (!nombre.isEmpty()) {
+				modelo.addElement(nombre);
+				textField.setText("");
+				textField.requestFocus();
+
+				// Activar botones cuando haya al menos un cliente
+				añadir.setEnabled(true);
+				buscar.setEnabled(true);
+				eliminar.setEnabled(true);
+				botonProcesador1.setEnabled(true);
+				botonProcesador2.setEnabled(true);
+				botonProcesador3.setEnabled(true);
+				botonProcesador4.setEnabled(true);
+				
+				botonDisco1.setEnabled(true);
+				botonDisco2.setEnabled(true);
+				botonDisco3.setEnabled(true);
+				botonDisco4.setEnabled(true);
+				
+				botonMemoria1.setEnabled(true);
+				botonMemoria2.setEnabled(true);
+				botonMemoria3.setEnabled(true);
+				botonMemoria4.setEnabled(true);
+				
+				botonMonitor1.setEnabled(true);
+				botonMonitor2.setEnabled(true);
+				botonMonitor3.setEnabled(true);
+				botonMonitor4.setEnabled(true);
+
+			}
+		});
+		
+
 		
 	}
+		
+		
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==añadir) {
-			
-			listaClientes.setText(cliente.getText());
-		}
-		if(e.getSource()==salir) {
+		if(e.getSource() == salir) {
 			System.exit(0);
 		}
+		
 	}
-}
+		
+	
+	
+	
+		
+	}
+
