@@ -274,7 +274,7 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		salir.addActionListener(this);
 		
 		
-		
+		  
 		
 		
 	}
