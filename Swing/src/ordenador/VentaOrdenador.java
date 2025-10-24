@@ -1,7 +1,8 @@
-package fda;
+package ordenador;
 
 import java.awt.EventQueue;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
@@ -14,10 +15,13 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -32,7 +36,7 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 	private JTextField textField;
 	private JComboBox<String> localidades;
 	private JTextArea textArea;
-	private JList<String> listaClientes;
+	
 	private JLabel procesador;
 	private JLabel memoria;
 	private JLabel monitor;
@@ -52,7 +56,13 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 	private JRadioButton botonDisco3;
 	private JRadioButton botonDisco4;
 	
-	private JButton añadir,salir;
+	private JButton añadir,salir,eliminar;
+	private DefaultListModel<String> modelo = new DefaultListModel<>();
+	private JList<String> listaClientes = new JList<>(modelo);
+	private JButton cancelar = new JButton("Cancelar");
+	private JButton buscar = new JButton("Buscar");
+		private java.util.Vector<Venta> ventas = new java.util.Vector<>();
+
 	
 	/**
 	 * Launch the application.
@@ -96,8 +106,7 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		
 		
 		
-		DefaultListModel<String> modelo = new DefaultListModel<>();
-		listaClientes = new JList<>(modelo);
+		
 		JScrollPane scroll = new JScrollPane(listaClientes);
 		scroll.setBounds(262, 21, 108, 60); // aumentamos altura visible
 		contentPane.add(scroll);
@@ -110,6 +119,8 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		
 		localidades.addItem("Villalba");
 		localidades.addItem("Galapagar");
+		localidades.addItem("Alpedrete");
+		localidades.addItem("Moralzarzal");
 		localidades.addItem("Colmenarejo");
 		
 		
@@ -254,28 +265,31 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		opciones4.setBounds(417, 202, 116, 23);
 		contentPane.add(opciones4);
 		
-		JButton añadir = new JButton("Añadir");
+		 añadir = new JButton("Añadir");
 		añadir.setBounds(10, 269, 89, 23);
+		añadir.addActionListener(this);
 		contentPane.add(añadir);
+	
 		
-		JButton buscar = new JButton("Buscar");
 		buscar.setBounds(114, 269, 89, 23);
+		buscar.addActionListener(this);
 		contentPane.add(buscar);
 		
-		JButton eliminar = new JButton("Eliminar");
+		 eliminar = new JButton("Eliminar");
 		eliminar.setBounds(212, 269, 89, 23);
+		eliminar.addActionListener(this);
 		contentPane.add(eliminar);
 		
-		JButton cancelar = new JButton("Cancelar");
 		cancelar.setBounds(485, 249, 89, 23);
+		cancelar.addActionListener(this);
 		contentPane.add(cancelar);
 		
 		 salir = new JButton("Salir");
 		salir.setBounds(485, 283, 89, 23);
+		salir.addActionListener(this);
 		contentPane.add(salir);
 		
-		añadir.addActionListener(this);
-		salir.addActionListener(this);
+	
 		
 		añadir.setEnabled(false);
 		buscar.setEnabled(false);
@@ -300,7 +314,12 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 		botonMonitor3.setEnabled(false);
 		botonMonitor4.setEnabled(false);
 
-		
+		textField.addKeyListener(new KeyAdapter() {
+		    public void keyTyped(KeyEvent e) {
+		        if (textField.getText().length() >= 15)
+		            e.consume(); // bloquea más escritura
+		    }
+		});
 		
 		textField.addActionListener(e -> {
 			String nombre = textField.getText().trim();
@@ -333,10 +352,20 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 				botonMonitor3.setEnabled(true);
 				botonMonitor4.setEnabled(true);
 
+				
+
+				
+		        if (!nombre.isEmpty() && !modelo.contains(nombre)) {
+		            modelo.addElement(nombre);
+		            textField.setText("");
+		        }
 			}
 		});
 		
-
+		botonProcesador2.setSelected(true);
+		botonMemoria4.setSelected(true);
+		botonMonitor4.setSelected(true);
+		botonDisco4.setSelected(true);
 		
 	}
 		
@@ -345,14 +374,182 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == salir) {
-			System.exit(0);
-		}
-		
+	    if (e.getSource() == salir) {
+	        System.exit(0);
+	    }
+
+	    if (e.getSource() == eliminar) {
+	        String nombreSel = listaClientes.getSelectedValue();
+
+	        if (nombreSel == null) {
+	            JOptionPane.showMessageDialog(this, "Selecciona un cliente para eliminar.");
+	            return;
+	        }
+
+	        int confirm = JOptionPane.showConfirmDialog(
+	            this,
+	            "¿Seguro que deseas eliminar la venta de " + nombreSel + "?",
+	            "Confirmar eliminación",
+	            JOptionPane.YES_NO_OPTION
+	        );
+
+	        if (confirm == JOptionPane.YES_OPTION) {
+	            // Eliminar del vector de ventas
+	            ventas.removeIf(v -> v.getNombreCliente().equalsIgnoreCase(nombreSel));
+
+	            // Eliminar del modelo de la lista
+	            modelo.removeElement(nombreSel);
+
+	            // Limpiar campos
+	            textField.setText("");
+	            bg1.clearSelection();
+	            bg2.clearSelection();
+	            bg3.clearSelection();
+	            bg4.clearSelection();
+	            for (var comp : contentPane.getComponents()) {
+	                if (comp instanceof JCheckBox) {
+	                    ((JCheckBox) comp).setSelected(false);
+	                }
+	            }
+
+	            JOptionPane.showMessageDialog(this, "Venta eliminada correctamente.");
+
+	            // Restaurar botones
+	            añadir.setEnabled(true);
+	            buscar.setEnabled(true);
+	            eliminar.setEnabled(false);
+	        }
+	    }
+
+
+	    // 🔹 Añadir cliente
+	    if (e.getSource() == añadir) {
+	        String nombre = textField.getText().trim();
+
+	        if (nombre.isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "Introduce un nombre.", "Aviso", JOptionPane.WARNING_MESSAGE);
+	            return;
+	        }
+
+	        if (modelo.contains(nombre)) {
+	            JOptionPane.showMessageDialog(this, "Ese cliente ya está en la lista.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+	            return;
+	        }
+
+	        // Añadir nombre al JList
+	        modelo.addElement(nombre);
+
+	        String localidadSel = (String) localidades.getSelectedItem();
+	        String procesadorSel = getSelectedButtonText(bg1);
+	        String memoriaSel = getSelectedButtonText(bg2);
+	        String monitorSel = getSelectedButtonText(bg3);
+	        String discoSel = getSelectedButtonText(bg4);
+
+	        java.util.List<String> opcionesSel = new java.util.ArrayList<>();
+	        for (var comp : contentPane.getComponents()) {
+	            if (comp instanceof JCheckBox chk && chk.isSelected()) {
+	                opcionesSel.add(chk.getText());
+	            }
+	        }
+
+	        // Crear y guardar la venta
+	        Venta nuevaVenta = new Venta(nombre, localidadSel, procesadorSel, memoriaSel, monitorSel, discoSel, opcionesSel);
+	        ventas.add(nuevaVenta);
+
+	        System.out.println("✅ Venta añadida: " + nuevaVenta);
+	        textField.setText("");
+	    }
+
+
+
+	    // 🔹 Buscar cliente
+	    if (e.getSource() == buscar) {
+	        String nombre = textField.getText().trim();
+
+	        if (nombre.isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "Introduce un nombre de cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
+	            return;
+	        }
+
+	        // Filtramos las ventas del cliente
+	        java.util.List<Venta> ventasCliente = new java.util.ArrayList<>();
+	        for (Venta v : ventas) {
+	            if (v.getNombreCliente().equalsIgnoreCase(nombre)) {
+	                ventasCliente.add(v);
+	            }
+	        }
+
+	        if (ventasCliente.isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "No se han encontrado ventas para el cliente: " + nombre);
+	            return;
+	        }
+
+	        // Mostrar la primera venta y preguntar si quiere ver más
+	        int index = 0;
+	        boolean continuar = true;
+
+	        while (continuar && index < ventasCliente.size()) {
+	            Venta v = ventasCliente.get(index);
+
+	            // Mostramos los datos de la venta
+	            JOptionPane.showMessageDialog(
+	                this,
+	                "Venta nº " + (index + 1) + ":\n" +
+	                "Cliente: " + v.getNombreCliente() + "\n" +
+	                "Localidad: " + v.getLocalidad() + "\n" +
+	                "Procesador: " + v.getProcesador() + "\n" +
+	                "Memoria: " + v.getMemoria() + "\n" +
+	                "Monitor: " + v.getMonitor() + "\n" +
+	                "Disco Duro: " + v.getDiscoDuro() + "\n" +
+	                "Opciones: " + String.join(", ", v.getOpciones()),
+	                "Detalle de venta", JOptionPane.INFORMATION_MESSAGE
+	            );
+
+	            index++;
+	            if (index < ventasCliente.size()) {
+	                int respuesta = JOptionPane.showConfirmDialog(
+	                    this,
+	                    "¿Deseas ver la siguiente venta de este cliente?",
+	                    "Continuar búsqueda",
+	                    JOptionPane.YES_NO_OPTION
+	                );
+	                continuar = (respuesta == JOptionPane.YES_OPTION);
+	            }
+	        }
+	    }
+
+	    
+	    if (e.getSource()==cancelar) {
+	        textField.setText("");
+	        listaClientes.clearSelection();
+	        localidades.setSelectedIndex(0);
+
+	        // Desmarcar todos los radio buttons
+	        bg1.clearSelection();
+	        bg2.clearSelection();
+	        bg3.clearSelection();
+	        bg4.clearSelection();
+
+	        // Desmarcar todos los checkboxes
+	        for (var comp : contentPane.getComponents()) {
+	            if (comp instanceof JCheckBox) {
+	                ((JCheckBox) comp).setSelected(false);
+	            }
+	        }
+	    }
 	}
-		
 	
+	private String getSelectedButtonText(ButtonGroup bg) {
+	    for (java.util.Enumeration<AbstractButton> buttons = bg.getElements(); buttons.hasMoreElements();) {
+	        AbstractButton button = buttons.nextElement();
+	        if (button.isSelected()) {
+	            return button.getText();
+	        }
+	    }
+	    return "No seleccionado";
+	}
 	
+
 	
 		
 	}
