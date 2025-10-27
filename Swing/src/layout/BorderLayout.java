@@ -1,0 +1,84 @@
+package layout;
+
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+public class BorderLayout extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BorderLayout frame = new BorderLayout();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BorderLayout() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+
+//		JFrame v=new JFrame();
+//		
+//		v.getContentPane().setLayout(new java.awt.FlowLayout());
+//		
+//		JButton j = new JButton("boton");
+//		JTextField textField=new JTextField(10);
+//		JCheckBox checkBox =new JCheckBox("checkbox");
+//		JLabel etiqueta =new JLabel("Etiqueta");
+//		
+//		v.getContentPane().add(j);
+//		v.getContentPane().add(textField);
+//		v.getContentPane().add(checkBox);
+//		v.getContentPane().add(etiqueta);
+//		
+//		
+//		v.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//		
+//		
+//		v.pack();
+//		v.setVisible(true);
+		
+		JFrame f=new JFrame();
+		f.getContentPane();
+		
+		
+		JPanel barraHerramientas=new JPanel();
+		barraHerramientas.setLayout(new FlowLayout());
+		barraHerramientas.add(new JButton("boton 1 "));
+		barraHerramientas.add(new JButton("boton 2 "));
+		
+		
+		
+		getContentPane().add(barraHerramientas,BorderLayout.NORTH);
+		
+		
+	}
+
+}
