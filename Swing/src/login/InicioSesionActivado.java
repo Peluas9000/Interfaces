@@ -1,14 +1,14 @@
-package layout;
+package login;
 
 import java.awt.EventQueue;
-import java.text.DecimalFormat;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.FlowLayout;
+import javax.swing.JLabel;
+import java.awt.Font;
 
-public class Cronometro extends JFrame {
+public class InicioSesionActivado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -20,7 +20,7 @@ public class Cronometro extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Cronometro frame = new Cronometro();
+					InicioSesionActivado frame = new InicioSesionActivado();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,21 +31,22 @@ public class Cronometro extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * FLOWLAYOUT + TIME
 	 */
-	public Cronometro() {
+	public InicioSesionActivado() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		contentPane.setLayout(null);
+		
+		JLabel labelBienvenido = new JLabel("Bienvenido , gracias por iniciar");
+		labelBienvenido.setFont(new Font("Tahoma", Font.ITALIC, 21));
+		labelBienvenido.setBounds(68, 71, 319, 69);
+		contentPane.add(labelBienvenido);
 		
 		
-		
-		
-		
-		
+
 	}
 
 }

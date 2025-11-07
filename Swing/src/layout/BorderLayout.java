@@ -76,7 +76,7 @@ public class BorderLayout extends JFrame {
 		
 		
 		
-		getContentPane().add(barraHerramientas,BorderLayout.NORTH);
+//		getContentPane().add(barraHerramientas,BorderLayout.NORTH);
 		
 		
 	}
