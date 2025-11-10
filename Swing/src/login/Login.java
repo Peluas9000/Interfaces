@@ -71,7 +71,6 @@ public class Login extends JFrame {
 					}else {
 						String p= JOptionPane.showInputDialog("Contraseña o usuario incorrecto");
 						
-						
 					}
 				}
 			}
