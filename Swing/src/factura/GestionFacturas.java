@@ -14,10 +14,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class GestionFacturas {
 
@@ -66,23 +65,29 @@ public class GestionFacturas {
     }
 
     // --- CREA EL DOCUMENTO PDF ---
+ // --- CREA EL DOCUMENTO PDF ---
     private static void crearPDF(ArrayList<FacturaObjeto> facturas, File file) throws IOException {
         final float MARGIN = 50;
         final float Y_START = PDRectangle.A4.getHeight() - MARGIN;
         final float LEADING = 18f;
         final DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+        // ****** ¡AQUÍ ESTÁ LA SOLUCIÓN! ******
+        // 1. Define tus fuentes (las "opciones" que pides) usando Standard14Fonts
+//        final PDFont FONT_NEGRITA = new Standard14Fonts.Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+//        final PDFont FONT_NORMAL = new Standard14Fonts.Font(Standard14Fonts.FontName.HELVETICA);
+        // ***************************************
+
         try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             doc.addPage(page);
             PDPageContentStream cs = new PDPageContentStream(doc, page);
 
-            PDFont fontTitulo = new Standard14Fonts.Font(Standard14Fonts.FontName.HELVETICA_BOLD);
-            PDFont fontTexto  = new Standard14Fonts.Font(Standard14Fonts.FontName.HELVETICA);
-
+            
             // Título
             cs.beginText();
-            cs.setFont(fontTitulo, 18);
+            // 2. USA LA FUENTE NUEVA (en vez de PDType1Font.HELVETICA_BOLD)
+            cs.setFont(FONT_NEGRITA, 18); // <-- CAMBIO
             cs.newLineAtOffset(MARGIN, Y_START);
             cs.showText("LISTADO DE FACTURAS");
             cs.endText();
@@ -91,7 +96,8 @@ public class GestionFacturas {
 
             // Cabecera
             cs.beginText();
-            cs.setFont(fontTexto, 12);
+            // 3. USA LA FUENTE NUEVA
+            cs.setFont(FONT_NEGRITA, 12); // <-- CAMBIO
             cs.newLineAtOffset(MARGIN, y);
             cs.showText(String.format("%-15s %-15s %-15s %-15s", 
                     "ASUNTO", "FECHA", "CANTIDAD", "TIPO"));
@@ -100,7 +106,9 @@ public class GestionFacturas {
             y -= LEADING;
 
             // Contenido
-            cs.setFont(PDType1Font.HELVETICA, 11);
+            // 4. USA LA FUENTE NUEVA (en vez de PDType1Font.HELVETICA)
+            cs.setFont(FONT_NORMAL, 11); // <-- CAMBIO
+            
             for (FacturaObjeto f : facturas) {
                 if (y < 70) { // salto de página
                     cs.close();
@@ -108,7 +116,9 @@ public class GestionFacturas {
                     doc.addPage(page);
                     cs = new PDPageContentStream(doc, page);
                     y = Y_START - 40;
-                    cs.setFont(PDType1Font.HELVETICA, 11);
+                    
+                    // 5. RE-APLICA LA FUENTE EN LA PÁGINA NUEVA
+                    cs.setFont(FONT_NORMAL, 11); // <-- CAMBIO
                 }
 
                 String linea = String.format("%-15.15s %-15s %-15s %-15.15s",

@@ -437,8 +437,4 @@ public class Factura extends JFrame implements ActionListener {
 	public ArrayList<FacturaObjeto> getFacturas() {
 	    return facturas;
 	}
-
-	
-
-
 }
