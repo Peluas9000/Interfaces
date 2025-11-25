@@ -382,7 +382,7 @@ public class VentaOrdenador extends JFrame implements ActionListener{
 	        String nombreSel = listaClientes.getSelectedValue();
 
 	        if (nombreSel == null) {
-	            JOptionPane.showMessageDialog(this, "Selecciona un cliente para eliminar.");
+	            JOptionPane.showMessageDialog(this, "Selecciona un cliente para eliminar."); 
 	            return;
 	        }
 
