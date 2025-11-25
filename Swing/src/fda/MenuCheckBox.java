@@ -78,14 +78,14 @@ public class MenuCheckBox extends JFrame implements ActionListener, ChangeListen
 		m.add(m3);
 
 		check1 = new JCheckBox("celestese");
-		
-		check1.addChangeListener(this);
 		m3.add(check1);
+		check1.addChangeListener(this);
+		
 		
 		check2 = new JCheckBox("celestese");
-		
-		check2.addChangeListener(this);
 		m3.add(check2);
+		check2.addChangeListener(this);
+		
 		
 		
 		
